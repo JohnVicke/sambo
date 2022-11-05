@@ -19,12 +19,7 @@ type TextProps = React.PropsWithChildren & {
   className?: string;
 };
 
-export const Text = ({
-  className,
-  bold,
-  children,
-  variant = "p",
-}: TextProps) => (
+export const Text = ({ className, bold, children, variant = "p" }: TextProps) => (
   <RNText
     className={clsx("tracking-wide", styles[variant], {
       "font-poppinsBold": bold,

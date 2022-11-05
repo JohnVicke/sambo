@@ -20,9 +20,7 @@ type RootStackParamlist = {
   CreateHousehold: undefined;
 };
 
-type Onboarding = inferProcedureOutput<
-  AppRouter["auth"]["me"]
->["user"]["onboarding"];
+type Onboarding = inferProcedureOutput<AppRouter["auth"]["me"]>["user"]["onboarding"];
 
 const getInitialRoute = (onboarding: Onboarding) => {
   if (!onboarding?.userinfo_complete) {
@@ -68,28 +66,28 @@ export const OnboardingNavigator = () => {
         name="UserInfo"
         component={UserInfoScreen}
         options={{
-          headerLeft: (props) => <CustomHeaderLeft {...props} />,
+          headerLeft: props => <CustomHeaderLeft {...props} />,
         }}
       />
       <Stack.Screen
         name="Household"
         component={HouseHoldScreen}
         options={{
-          headerLeft: (props) => <CustomHeaderLeft {...props} />,
+          headerLeft: props => <CustomHeaderLeft {...props} />,
         }}
       />
       <Stack.Screen
         name="JoinHousehold"
         component={JoinHouseholdScreen}
         options={{
-          headerLeft: (props) => <CustomHeaderLeft {...props} />,
+          headerLeft: props => <CustomHeaderLeft {...props} />,
         }}
       />
       <Stack.Screen
         name="CreateHousehold"
         component={CreateHouseholdScreen}
         options={{
-          headerLeft: (props) => <CustomHeaderLeft {...props} />,
+          headerLeft: props => <CustomHeaderLeft {...props} />,
         }}
       />
     </Stack.Navigator>

@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import React from "react";
-import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Text } from "./Text";
 
@@ -16,20 +15,11 @@ type ButtonProps = React.PropsWithChildren & {
   variant?: "outlined" | "filled";
 };
 
-export const Button = ({
-  onPress,
-  children,
-  variant = "filled",
-}: ButtonProps) => {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      className={clsx(
-        "flex items-center justify-center p-2 rounded-md",
-        styles[variant]
-      )}
-    >
-      <Text bold>{children}</Text>
-    </TouchableOpacity>
-  );
-};
+export const Button = ({ onPress, children, variant = "filled" }: ButtonProps) => (
+  <TouchableOpacity
+    onPress={onPress}
+    className={clsx("flex items-center justify-center p-2 rounded-md", styles[variant])}
+  >
+    <Text bold>{children}</Text>
+  </TouchableOpacity>
+);

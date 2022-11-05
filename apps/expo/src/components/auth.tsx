@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Text,
-  TextInput,
-  View,
-  StyleSheet,
-  SafeAreaView,
-} from "react-native";
+import React from "react";
+import { Button, TextInput, View, SafeAreaView } from "react-native";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { setToken, trpc } from "../utils/trpc";
 
@@ -43,7 +36,7 @@ const SignUp = () => {
             keyboardType="email-address"
             className="w-full border-gray-800 border-2 p-2"
             onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
+            onChangeText={value => onChange(value)}
             value={value}
           />
         )}
@@ -53,11 +46,9 @@ const SignUp = () => {
   );
 };
 
-export const Auth = () => {
-  return (
-    <SafeAreaView className="flex flex-col items-center justify-center h-full w-full">
-      <View className="my-2" />
-      <SignUp />
-    </SafeAreaView>
-  );
-};
+export const Auth = () => (
+  <SafeAreaView className="flex flex-col items-center justify-center h-full w-full">
+    <View className="my-2" />
+    <SignUp />
+  </SafeAreaView>
+);

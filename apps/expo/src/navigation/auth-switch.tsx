@@ -1,23 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { TextInput, View, TouchableOpacity, Text } from "react-native";
+import { View, Text } from "react-native";
 import { Auth } from "../components/auth";
 import { Button } from "../components/Button";
-import { InputField } from "../components/InputField";
 import { CodeText } from "../components/CodeText";
 import { trpc } from "../utils/trpc";
 import { MainNavigator } from "./main";
 import { OnboardingNavigator } from "./onboarding";
-
-type AuthSwitchProps = {};
 
 const VerifyCodeScreen = () => {
   const ctx = trpc.useContext();
   const verifyCode = trpc.auth.verifyCode.useMutation({
     async onSuccess({ email_verified }) {
       const me = ctx.auth.me.getData();
-      if (me?.user)
-        ctx.auth.me.setData({ user: { ...me.user, email_verified } });
+      if (me?.user) ctx.auth.me.setData({ user: { ...me.user, email_verified } });
     },
   });
 
@@ -40,7 +36,7 @@ const VerifyCodeScreen = () => {
   );
 };
 
-export const AuthenticationSwitch = ({ }: AuthSwitchProps) => {
+export const AuthenticationSwitch = () => {
   const { data, isLoading } = trpc.auth.me.useQuery();
 
   if (isLoading) {
@@ -65,10 +61,7 @@ export const AuthenticationSwitch = ({ }: AuthSwitchProps) => {
     return <VerifyCodeScreen />;
   }
 
-  if (
-    !user.onboarding?.userinfo_complete ||
-    !user.onboarding?.household_complete
-  ) {
+  if (!user.onboarding?.userinfo_complete || !user.onboarding?.household_complete) {
     return <OnboardingNavigator />;
   }
 

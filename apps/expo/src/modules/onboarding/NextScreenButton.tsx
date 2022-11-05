@@ -7,12 +7,10 @@ type NextScreenButtonProps = {
   onPress: () => void;
 };
 
-export const NextScreenButton = ({ onPress }: NextScreenButtonProps) => {
-  return (
-    <View>
-      <MotiPressable onPress={onPress}>
-        <ChevronRightIcon height={40} width={40} color="#000" />
-      </MotiPressable>
-    </View>
-  );
-};
+export const NextScreenButton = ({ onPress }: NextScreenButtonProps) => (
+  <View>
+    <MotiPressable onPress={onPress}>
+      <ChevronRightIcon height={40} width={40} color="#000" />
+    </MotiPressable>
+  </View>
+);

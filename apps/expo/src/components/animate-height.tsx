@@ -1,7 +1,7 @@
 import React from "react";
-import { MotiView, TransitionConfig, useDynamicAnimation } from "moti";
+import { MotiView, useDynamicAnimation } from "moti";
 import { StyleSheet, Platform } from "react-native";
-import { useDerivedValue, useSharedValue } from "react-native-reanimated";
+import { useSharedValue } from "react-native-reanimated";
 import { View } from "react-native";
 
 type Props = {
@@ -18,35 +18,18 @@ function AnimateHeight({
   style,
   delay = Platform.select({ web: 250, default: 0 }),
   transition = { type: "timing", delay },
-  enterFrom = "top",
   onHeightDidAnimate,
   initialHeight = 0,
   ...motiViewProps
 }: Props) {
   const measuredHeight = useSharedValue(initialHeight);
-  const state = useDynamicAnimation(() => {
-    return {
-      height: initialHeight,
-      opacity: !initialHeight || hide ? 0 : 1,
-    };
-  });
+  const state = useDynamicAnimation(() => ({
+    height: initialHeight,
+    opacity: !initialHeight || hide ? 0 : 1,
+  }));
   if ("state" in motiViewProps) {
     console.warn("[AnimateHeight] state prop not supported");
   }
-
-  const animation = useDerivedValue(() => {
-    let height = Math.ceil(measuredHeight.value);
-    if (hide) {
-      height = 0;
-    }
-
-    const notVisible = !height || hide;
-
-    state.animateTo({
-      height,
-      opacity: !height || hide ? 0 : 1,
-    });
-  }, [hide, measuredHeight]);
 
   return (
     <MotiView
@@ -55,8 +38,7 @@ function AnimateHeight({
       transition={transition}
       onDidAnimate={
         onHeightDidAnimate &&
-        ((key, finished, _, { attemptedValue }) =>
-          key == "height" && onHeightDidAnimate(attemptedValue as number))
+        ((key, _finished, _, { attemptedValue }) => key == "height" && onHeightDidAnimate(attemptedValue as number))
       }
       style={[styles.hidden, style]}
     >

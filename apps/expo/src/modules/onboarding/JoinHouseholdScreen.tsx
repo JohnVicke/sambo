@@ -1,11 +1,7 @@
-import clsx from "clsx";
-import { AnimatePresence, MotiView } from "moti";
-import React, { useRef, useState } from "react";
+import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { TextInput, View, TouchableOpacity, Image } from "react-native";
-import { Text } from "../../components/Text";
+import { View, Image } from "react-native";
 import { Button } from "../../components/Button";
-import { InputField } from "../../components/InputField";
 import { OnboardingNavigationProps } from "../../navigation/onboarding";
 import { CodeText } from "../../components/CodeText";
 
@@ -19,10 +15,9 @@ export const JoinHouseholdScreen = ({ navigation }: HouseHoldScreenProps) => {
   const form = useForm<FormValues>();
   const code = form.watch("code");
 
-  const ref = useRef<TextInput>(null);
-
-  const handleSubmit = form.handleSubmit((values) => {
+  const handleSubmit = form.handleSubmit(values => {
     navigation.navigate("Household");
+    console.log(values);
   });
 
   return (

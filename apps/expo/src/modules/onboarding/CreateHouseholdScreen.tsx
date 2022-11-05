@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
@@ -13,7 +12,7 @@ type FormValues = {
   name: string;
 };
 
-export const CreateHouseholdScreen = ({ navigation }: HouseHoldScreenProps) => {
+export const CreateHouseholdScreen = ({}: HouseHoldScreenProps) => {
   const ctx = trpc.useContext();
   const createHousehold = trpc.onboarding.createHouseHold.useMutation({
     async onSuccess({ household_complete, userinfo_complete }) {
@@ -37,11 +36,7 @@ export const CreateHouseholdScreen = ({ navigation }: HouseHoldScreenProps) => {
   return (
     <View className="h-full w-full flex flex-col p-8 justify-center">
       <FormProvider {...form}>
-        <InputField
-          rules={{ required: true }}
-          name="name"
-          label="Vad heter erat hem?"
-        />
+        <InputField rules={{ required: true }} name="name" label="Vad heter erat hem?" />
       </FormProvider>
       <View className="my-2" />
       <Button onPress={handleSubmit}>Fortsätt</Button>
