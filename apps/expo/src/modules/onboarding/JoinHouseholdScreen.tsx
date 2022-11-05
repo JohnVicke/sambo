@@ -21,7 +21,7 @@ export const JoinHouseholdScreen = ({ navigation }: HouseHoldScreenProps) => {
   });
 
   return (
-    <View className="h-full w-full flex flex-col p-8 justify-center">
+    <View className="flex h-full w-full flex-col justify-center p-8">
       <FormProvider {...form}>
         <Image source={require("./onboarding2.png")} />
         <View className="my-2" />

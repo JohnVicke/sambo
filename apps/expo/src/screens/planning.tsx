@@ -34,10 +34,10 @@ const Accordion = ({
 }) => {
   const [open, setOpen] = React.useState(defaultOpen);
   return (
-    <View className="bg-white p-2 rounded-md">
+    <View className="rounded-md bg-white p-2">
       <Pressable onPress={() => setOpen(!open)}>
-        <View className="flex flex-row justify-between items-center">
-          <Text className="font-medium text-lg">{title}</Text>
+        <View className="flex flex-row items-center justify-between">
+          <Text className="text-lg font-medium">{title}</Text>
           <MotiView animate={{ rotateZ: open ? "-180deg" : "0deg" }} transition={{ type: "spring", damping: 12 }}>
             <ChevronDownIcon color="#000" size="24" />
           </MotiView>
@@ -54,7 +54,7 @@ const Avatar = ({ firstname, lastname, color }: User) => {
   const initials = `${firstname[0].toUpperCase()}${lastname[0].toUpperCase()}`;
   const bg = `bg-[${color}]`;
   return (
-    <View className={clsx(bg, "h-8 w-8 rounded-full items-center justify-center")}>
+    <View className={clsx(bg, "h-8 w-8 items-center justify-center rounded-full")}>
       <Text>{initials}</Text>
     </View>
   );
@@ -81,9 +81,9 @@ export const PlanningScreen = () => {
 
   return (
     <SafeAreaView>
-      <View className="w-full h-full p-4">
-        <View className="p-4 flex flex-row justify-between">
-          <Text className="font-bold text-2xl">{data.household?.name}</Text>
+      <View className="h-full w-full p-4">
+        <View className="flex flex-row justify-between p-4">
+          <Text className="text-2xl font-bold">{data.household?.name}</Text>
           <Avatars />
         </View>
         <Accordion title="Måndag" content={<Avatar {...testUsers[0]} />} />

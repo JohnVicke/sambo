@@ -20,7 +20,7 @@ export const CodeText = ({ code, length, name }: { name: string; code?: string; 
           {Array.from({ length }).map((_, i) => (
             <View
               key={`${i}-`}
-              className={clsx("bg-gray-300 p-4 mx-2 rounded-md w-16 h-16 flex items-center justify-center", {
+              className={clsx("mx-2 flex h-16 w-16 items-center justify-center rounded-md bg-gray-300 p-4", {
                 "bg-gray-400": current === i,
               })}
             >

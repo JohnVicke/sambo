@@ -18,7 +18,7 @@ type ButtonProps = React.PropsWithChildren & {
 export const Button = ({ onPress, children, variant = "filled" }: ButtonProps) => (
   <TouchableOpacity
     onPress={onPress}
-    className={clsx("flex items-center justify-center p-2 rounded-md", styles[variant])}
+    className={clsx("flex items-center justify-center rounded-md p-2", styles[variant])}
   >
     <Text bold>{children}</Text>
   </TouchableOpacity>

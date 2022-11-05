@@ -34,7 +34,7 @@ export const CreateHouseholdScreen = ({}: HouseHoldScreenProps) => {
   });
 
   return (
-    <View className="h-full w-full flex flex-col p-8 justify-center">
+    <View className="flex h-full w-full flex-col justify-center p-8">
       <FormProvider {...form}>
         <InputField rules={{ required: true }} name="name" label="Vad heter erat hem?" />
       </FormProvider>

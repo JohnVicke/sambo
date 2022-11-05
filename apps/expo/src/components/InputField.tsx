@@ -23,7 +23,7 @@ export const InputField = React.forwardRef<TextInput, InputFieldProps>(
           ref={ref}
           keyboardType="email-address"
           className={clsx("w-full border-b-2 p-2", {
-            "h-0 p-0 m-0 opacity-0": hidden,
+            "m-0 h-0 p-0 opacity-0": hidden,
           })}
           onBlur={onBlur}
           onChangeText={value => onChange(value)}

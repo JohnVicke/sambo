@@ -4,5 +4,5 @@ import { SafeAreaView } from "react-native";
 type DefaultLayoutProps = React.PropsWithChildren;
 
 export const DefaultLayout = ({ children }: DefaultLayoutProps) => (
-  <SafeAreaView className="flex flex-1 h-full w-full p-4">{children}</SafeAreaView>
+  <SafeAreaView className="flex h-full w-full flex-1 p-4">{children}</SafeAreaView>
 );

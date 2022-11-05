@@ -40,7 +40,7 @@ export const UserInfoScreen = ({ navigation }: UserInfoScreenProps) => {
   });
 
   return (
-    <SafeAreaProvider className="h-full w-full flex flex-col justify-center p-8">
+    <SafeAreaProvider className="flex h-full w-full flex-col justify-center p-8">
       <FormProvider {...form}>
         <Image source={require("./onboarding1.png")} />
         <Text variant="h1">Välkommen till SamboAppen</Text>

@@ -6,7 +6,7 @@ import { OnboardingNavigationProps } from "../../navigation/onboarding";
 type HouseHoldScreenProps = OnboardingNavigationProps;
 
 export const HouseHoldScreen = ({ navigation }: HouseHoldScreenProps) => (
-  <View className="h-full w-full flex flex-col p-8 justify-center">
+  <View className="flex h-full w-full flex-col justify-center p-8">
     <Image source={require("./onboarding2.png")} />
     <Button onPress={() => navigation.navigate("CreateHousehold")}>Skapa</Button>
     <Button onPress={() => navigation.navigate("JoinHousehold")}>Gå med</Button>

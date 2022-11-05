@@ -25,10 +25,10 @@ const VerifyCodeScreen = () => {
   });
 
   return (
-    <View className="flex p-8 flex-col h-full w-full items-center justify-center">
+    <View className="flex h-full w-full flex-col items-center justify-center p-8">
       <FormProvider {...form}>
         <CodeText code={code} length={4} name="code" />
-        <View className="w-full mt-4">
+        <View className="mt-4 w-full">
           <Button onPress={onSubmit}>Verifiera</Button>
         </View>
       </FormProvider>

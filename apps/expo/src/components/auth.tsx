@@ -34,7 +34,7 @@ const SignUp = () => {
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             keyboardType="email-address"
-            className="w-full border-gray-800 border-2 p-2"
+            className="w-full border-2 border-gray-800 p-2"
             onBlur={onBlur}
             onChangeText={value => onChange(value)}
             value={value}
@@ -47,7 +47,7 @@ const SignUp = () => {
 };
 
 export const Auth = () => (
-  <SafeAreaView className="flex flex-col items-center justify-center h-full w-full">
+  <SafeAreaView className="flex h-full w-full flex-col items-center justify-center">
     <View className="my-2" />
     <SignUp />
   </SafeAreaView>
