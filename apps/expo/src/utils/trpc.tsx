@@ -1,8 +1,10 @@
 import { createTRPCReact } from "@trpc/react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { AppRouter } from "@acme/api";
 /**
  * A set of typesafe hooks for consuming your API.
  */
+
 export const trpc = createTRPCReact<AppRouter>();
 
 /**
@@ -17,22 +19,47 @@ const getBaseUrl = () => {
    * you don't have anything else running on it, or you'd have to change it.
    */
   const localhost = Constants.manifest?.debuggerHost?.split(":")[0];
-  if (!localhost) throw new Error("failed to get localhost, configure it manually");
+  if (!localhost)
+    throw new Error("failed to get localhost, configure it manually");
   return `http://${localhost}:3000`;
 };
 
 /**
  * A wrapper for your app that provides the TRPC context.
  * Use only in _app.tsx
+ *
  */
-import React from "react";
+
+let token: string;
+
+const getToken = async () => {
+  const storageToken = await AsyncStorage.getItem("token");
+  token = storageToken || "";
+};
+
+export const setToken = async (accessToken: string) => {
+  await AsyncStorage.setItem("token", accessToken);
+  token = accessToken;
+};
+
+export const removeToken = async () => {
+  await AsyncStorage.removeItem("token");
+  token = "";
+};
+
+import React, { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from '@trpc/client';
+import { httpBatchLink } from "@trpc/client";
 import { transformer } from "@acme/api/transformer";
 
 export const TRPCProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  useEffect(() => {
+    console.log("\n\nGET TOKEN\n\n");
+    getToken();
+  }, []);
+
   const [queryClient] = React.useState(() => new QueryClient());
   const [trpcClient] = React.useState(() =>
     trpc.createClient({
@@ -40,9 +67,14 @@ export const TRPCProvider: React.FC<{ children: React.ReactNode }> = ({
       links: [
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
+          headers() {
+            return {
+              Authorization: token,
+            };
+          },
         }),
       ],
-    }),
+    })
   );
 
   return (

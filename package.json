@@ -1,9 +1,10 @@
 {
-  "name": "create-t3-turbo",
+  "name": "sambo-appen",
   "private": true,
   "packageManager": "pnpm@7.13.0",
   "scripts": {
     "db-generate": "turbo db-generate",
+    "db-generate-types": "turbo db-generate-types",
     "db-push": "turbo db-push",
     "build": "turbo build",
     "dev": "turbo dev --parallel",

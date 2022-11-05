@@ -12,7 +12,9 @@
       "cache": false
     },
     "db-generate": {
-      "cache": true 
+    },
+    "db-generate-types": {
+      "cache": false
     },
     "db-push": {
       "cache": false
