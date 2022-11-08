@@ -17,7 +17,6 @@ export const JoinHouseholdScreen = ({ navigation }: HouseHoldScreenProps) => {
 
   const handleSubmit = form.handleSubmit(values => {
     navigation.navigate("Household");
-    console.log(values);
   });
 
   return (

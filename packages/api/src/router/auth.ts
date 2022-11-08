@@ -10,54 +10,60 @@ import { authProcedure } from "../procedures/auth-procedure";
 const createAccessToken = (userId: string) => jwt.sign(userId, "supersecret");
 
 export const authRouter = t.router({
-  signUp: t.procedure
-    .input(z.object({ email: z.string() }))
-    .mutation(async ({ ctx, input: { email } }) => {
-      try {
-        const expires = new Date();
-        const code = v4().slice(0, 4);
-        expires.setHours(expires.getHours() + 1);
+  signUp: t.procedure.input(z.object({ email: z.string() })).mutation(async ({ ctx, input: { email } }) => {
+    try {
+      const expires = new Date();
+      const code = v4().slice(0, 4);
+      expires.setHours(expires.getHours() + 1);
 
-        const user = await ctx.prisma.user.create({
-          data: {
-            email: email,
-            emailVerification: {
-              create: {
-                expires,
-                code,
-              },
-            },
-            onboarding: {
-              create: {},
+      const user = await ctx.prisma.user.create({
+        data: {
+          email: email,
+          emailVerification: {
+            create: {
+              expires,
+              code,
             },
           },
-        });
+          onboarding: {
+            create: {},
+          },
+        },
+      });
 
-        const jwt = createAccessToken(user.id);
-        sendInviteMail({ receiver: email, verificationCode: code });
+      const jwt = createAccessToken(user.id);
+      sendInviteMail({ receiver: email, verificationCode: code });
 
-        return { accessToken: jwt };
-      } catch (error: any) {
-        if (error.message.includes("Unique")) {
-          throw new TRPCError({ code: "CONFLICT", message: "already_exists" });
-        }
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      return { accessToken: jwt };
+    } catch (error: any) {
+      if (error.message.includes("Unique")) {
+        throw new TRPCError({ code: "CONFLICT", message: "already_exists" });
       }
-    }),
-  signIn: authProcedure.mutation(async ({ ctx }) => {}),
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+    }
+  }),
+  signIn: t.procedure.input(z.object({ email: z.string() })).mutation(async ({ ctx, input }) => {
+    const user = await ctx.prisma.user.findFirst({
+      where: {
+        email: input.email,
+      },
+    });
+    if (!user) throw new TRPCError({ code: "NOT_FOUND" });
+
+    const jwt = createAccessToken(user.id);
+    return { accessToken: jwt };
+  }),
   verifyCode: authProcedure
     .input(
       z.object({
         code: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const emailVerification = await ctx.prisma.emailVerification.findUnique(
-          {
-            where: { user_id: ctx.user.id },
-          }
-        );
+        const emailVerification = await ctx.prisma.emailVerification.findUnique({
+          where: { user_id: ctx.user.id },
+        });
 
         if (!emailVerification) {
           throw new TRPCError({ code: "NOT_FOUND" });
@@ -89,7 +95,7 @@ export const authRouter = t.router({
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       }
     }),
-  signOut: t.procedure.mutation(() => {}),
+  signOut: t.procedure.mutation(() => { }),
   me: t.procedure.query(async ({ ctx }) => {
     if (!ctx?.user?.id) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -110,8 +116,7 @@ export const authRouter = t.router({
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
 
-    if (!user.onboarding)
-      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+    if (!user.onboarding) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
     return { user };
   }),

@@ -3,8 +3,11 @@ import React from "react";
 import { Text } from "../components/Text";
 import { SafeAreaView, View } from "react-native";
 import { trpc } from "../utils/trpc";
+import { Button } from "../components/Button";
+import { MainNavigatorProps } from "../navigation/main";
+import { DefaultLayout } from "../modules/layouts/DefaultLayout";
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation }: MainNavigatorProps) => {
   const { data, isLoading } = trpc.household.get.useQuery();
 
   if (isLoading || !data?.household) {
@@ -15,10 +18,10 @@ export const HomeScreen = () => {
     );
   }
   return (
-    <SafeAreaView>
+    <DefaultLayout>
       <View className="h-full w-full p-4">
-        <Text variant="h1">{data.household.name}</Text>
+        <Button onPress={() => navigation.navigate("Expense")}>Utgifter</Button>
       </View>
-    </SafeAreaView>
+    </DefaultLayout>
   );
 };

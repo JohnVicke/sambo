@@ -1,8 +1,16 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 
-type DefaultLayoutProps = React.PropsWithChildren;
+type DefaultLayoutProps = React.PropsWithChildren & {
+  scroll?: boolean;
+};
 
-export const DefaultLayout = ({ children }: DefaultLayoutProps) => (
-  <SafeAreaView className="flex h-full w-full flex-1 p-4 bg-neutral-200">{children}</SafeAreaView>
-);
+export const DefaultLayout = ({ children, scroll }: DefaultLayoutProps) => {
+  const Wrapper = scroll ? ScrollView : View;
+
+  return (
+    <SafeAreaView className="flex h-full w-full flex-1 bg-neutral-200 p-4">
+      <Wrapper horizontal={false}>{children}</Wrapper>
+    </SafeAreaView>
+  );
+};

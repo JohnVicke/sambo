@@ -14,6 +14,13 @@ const SignUp = () => {
     defaultValues: { email: "viktormalmedal@gmail.com", password: "hello123!" },
   });
 
+  const signIn = trpc.auth.signIn.useMutation({
+    async onSuccess({ accessToken }) {
+      setToken(accessToken);
+      ctx.auth.me.invalidate();
+    },
+  });
+
   const signUp = trpc.auth.signUp.useMutation({
     async onSuccess({ accessToken }) {
       setToken(accessToken);
@@ -21,8 +28,12 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = ({ email }) => {
+  const onSubmitSignUp: SubmitHandler<FormValues> = ({ email }) => {
     signUp.mutate({ email });
+  };
+
+  const onSubmitSignIn: SubmitHandler<FormValues> = ({ email }) => {
+    signIn.mutate({ email });
   };
 
   return (
@@ -41,7 +52,8 @@ const SignUp = () => {
           />
         )}
       />
-      <Button onPress={handleSubmit(onSubmit)} title="sign up" />
+      <Button onPress={handleSubmit(onSubmitSignUp)} title="sign up" />
+      <Button onPress={handleSubmit(onSubmitSignIn)} title="sign in" />
     </View>
   );
 };

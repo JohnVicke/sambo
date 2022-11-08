@@ -17,22 +17,19 @@ type TextProps = React.PropsWithChildren & {
   variant?: TextVariant;
   bold?: boolean;
   medium?: boolean;
-  size?: number;
+  xl?: boolean;
   color?: string;
+  sm?: boolean;
 };
 
-export const Text = ({ size, color, bold, medium, children, variant = "p" }: TextProps) => (
+export const Text = ({ xl, color, sm, bold, medium, children, variant = "p" }: TextProps) => (
   <RNText
-    className={clsx(
-      "tracking-wide",
-      styles[variant],
-      {
-        [`text-[${size}px]`]: !!size,
-        "font-poppinsBold": bold,
-        "font-poppinsMedium": medium,
-      },
-      color,
-    )}
+    className={clsx(styles[variant], "tracking-wide", color, {
+      "font-poppinsBold": bold,
+      "font-poppinsMedium": medium,
+      "text-4xl": !!xl,
+      "text-xs": !!sm,
+    })}
   >
     {children}
   </RNText>

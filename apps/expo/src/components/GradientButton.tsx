@@ -16,7 +16,7 @@ export const GradientButton = ({ children, onPress }: GradientButtonProps) => (
       colors={["#3F3D56", "#6161FE", "#FF9E9E"]}
       style={{ borderRadius: 5 }}
     >
-      <View className="h-16 flex flex-row items-center justify-center m-[1px] p-2 rounded-md bg-neutral-200">
+      <View className="m-[1px] flex h-14 flex-row items-center justify-center rounded-md bg-neutral-200 p-2">
         <Text medium>{children}</Text>
         <View className="mx-2" />
         <BanknotesIcon height={32} width={32} color="black" />
@@ -24,19 +24,3 @@ export const GradientButton = ({ children, onPress }: GradientButtonProps) => (
     </LinearGradient>
   </TouchableOpacity>
 );
-
-const styles = StyleSheet.create({
-  circleGradient: {
-    margin: 1,
-    backgroundColor: "bg-base-200",
-    borderRadius: 5,
-  },
-  visit: {
-    margin: 4,
-    paddingHorizontal: 6,
-    textAlign: "center",
-    backgroundColor: "white",
-    color: "#008f68",
-    fontSize: 12,
-  },
-});
