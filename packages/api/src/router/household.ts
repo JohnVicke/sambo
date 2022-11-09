@@ -8,7 +8,7 @@ export const householdRouter = t.router({
       where: {
         members: {
           some: {
-            user_id: ctx.user.id,
+            userId: ctx.user.id,
           },
         },
       },

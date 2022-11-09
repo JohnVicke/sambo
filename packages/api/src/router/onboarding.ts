@@ -10,15 +10,15 @@ export const onBoardingRouter = t.router({
         name,
         onboarding: {
           update: {
-            userinfo_complete: true,
+            userinfoComplete: true,
           },
         },
       },
       select: {
         onboarding: {
           select: {
-            userinfo_complete: true,
-            household_complete: true,
+            userinfoComplete: true,
+            householdComplete: true,
           },
         },
       },
@@ -46,13 +46,13 @@ export const onBoardingRouter = t.router({
     });
 
     const onboarding = await ctx.prisma.onboarding.update({
-      where: { user_id: ctx.user.id },
+      where: { userId: ctx.user.id },
       data: {
-        household_complete: true,
+        householdComplete: true,
       },
       select: {
-        userinfo_complete: true,
-        household_complete: true,
+        userinfoComplete: true,
+        householdComplete: true,
       },
     });
 

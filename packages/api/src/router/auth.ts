@@ -62,7 +62,7 @@ export const authRouter = t.router({
     .mutation(async ({ ctx, input }) => {
       try {
         const emailVerification = await ctx.prisma.emailVerification.findUnique({
-          where: { user_id: ctx.user.id },
+          where: { userId: ctx.user.id },
         });
 
         if (!emailVerification) {
@@ -80,16 +80,16 @@ export const authRouter = t.router({
         await ctx.prisma.user.update({
           where: { id: ctx.user.id },
           data: {
-            email_verified: true,
+            emailVerified: true,
           },
         });
 
         await ctx.prisma.emailVerification.delete({
-          where: { user_id: ctx.user.id },
+          where: { userId: ctx.user.id },
         });
 
         return {
-          email_verified: true,
+          emailVerified: true,
         };
       } catch (error) {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
@@ -105,8 +105,8 @@ export const authRouter = t.router({
       include: {
         onboarding: {
           select: {
-            household_complete: true,
-            userinfo_complete: true,
+            householdComplete: true,
+            userinfoComplete: true,
           },
         },
       },

@@ -11,9 +11,9 @@ import { OnboardingNavigator } from "./onboarding";
 const VerifyCodeScreen = () => {
   const ctx = trpc.useContext();
   const verifyCode = trpc.auth.verifyCode.useMutation({
-    async onSuccess({ email_verified }) {
+    async onSuccess({ emailVerified }) {
       const me = ctx.auth.me.getData();
-      if (me?.user) ctx.auth.me.setData({ user: { ...me.user, email_verified } });
+      if (me?.user) ctx.auth.me.setData({ user: { ...me.user, emailVerified } });
     },
   });
 
@@ -57,11 +57,11 @@ export const AuthenticationSwitch = () => {
 
   const { user } = data;
 
-  if (!user.email_verified) {
+  if (!user.emailVerified) {
     return <VerifyCodeScreen />;
   }
 
-  if (!user.onboarding?.userinfo_complete || !user.onboarding?.household_complete) {
+  if (!user.onboarding?.userinfoComplete || !user.onboarding?.householdComplete) {
     return <OnboardingNavigator />;
   }
 

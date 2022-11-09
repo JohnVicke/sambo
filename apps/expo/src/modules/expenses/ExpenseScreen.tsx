@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { format } from "date-fns";
-import { FlatList, ScrollView, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { Text } from "../../components/Text";
 import { GradientText } from "../../components/GradientText";
 import { MainNavigatorProps } from "../../navigation/main";
@@ -60,9 +60,12 @@ const AnimatedAddButton = ({ description, onPress }: AnimatedAddButtonProps) => 
 type ExpenseSummaryProps = {
   name: string;
   balance: number;
+  householdId: string;
 };
 
-const ExpenseSummary = ({ name, balance }: ExpenseSummaryProps) => {
+const ExpenseSummary = ({ name, balance, householdId }: ExpenseSummaryProps) => {
+  const { data, isLoading } = trpc.expense.getStanding.useQuery({ householdId });
+
   let color = "text-black";
 
   if (balance > 0) {
@@ -110,11 +113,11 @@ const Expense = ({ expense }: ExpenseProps) => {
 };
 
 type ExpensesProps = {
-  household_id: string;
+  householdId: string;
 };
 
-const Expenses = ({ household_id }: ExpensesProps) => {
-  const { data, isLoading, error } = trpc.expense.getHousehold.useQuery({ household_id });
+const Expenses = ({ householdId }: ExpensesProps) => {
+  const { data, isLoading, error } = trpc.expense.getHousehold.useQuery({ householdId });
   if (isLoading) return <Text>Skeleton loader...</Text>;
 
   if (error?.data?.code === "NOT_FOUND") {
@@ -148,9 +151,9 @@ export const ExpenseScreen = ({ navigation }: MainNavigatorProps) => {
   return (
     <View className="flex-1">
       <DefaultLayout scroll>
-        <ExpenseSummary name={household.data.household.name} balance={1000} />
+        <ExpenseSummary name={household.data.household.name} balance={1000} householdId={household.data.household.id} />
         <View className="w-full rounded-md bg-neutral-300"></View>
-        {household.data.household.id && <Expenses household_id={household.data.household.id} />}
+        {household.data.household.id && <Expenses householdId={household.data.household.id} />}
       </DefaultLayout>
       <View className="absolute right-0 left-0 bottom-4 z-10 w-full items-center justify-center">
         <AnimatedAddButton description="Lägg till utgift" onPress={goToAddExpense} />

@@ -13,7 +13,7 @@ datasource db {
 model User {
   id                  String    @id @default(cuid())
   email               String    @unique
-  email_verified      Boolean   @default(false)
+  emailVerified       Boolean   @default(false)
   name                String?
 
   onboarding          Onboarding?
@@ -31,8 +31,8 @@ model Expense {
   amount              Float
   date                DateTime        @default(now())
 
-  member              HouseholdMember @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  member_id           String    
+  member              HouseholdMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId            String    
 
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
@@ -43,8 +43,8 @@ model EmailVerification {
   code                String    
   expires             DateTime
 
-  user                User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id             String    @unique
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String    @unique
 
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
@@ -52,10 +52,10 @@ model EmailVerification {
 
 model Onboarding {
   id                  String    @id @default(cuid())
-  userinfo_complete   Boolean   @default(false)
-  household_complete  Boolean   @default(false)
-  user                User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id             String    @unique
+  userinfoComplete   Boolean   @default(false)
+  householdComplete  Boolean   @default(false)
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String    @unique
 
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
@@ -74,11 +74,11 @@ model Household {
 model HouseholdMember {
   id                  String    @id @default(cuid())
 
-  household           Household @relation(fields: [household_id], references: [id])
-  household_id        String    
+  household           Household @relation(fields: [householdId], references: [id])
+  householdId         String    
 
-  user                User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id             String    @unique
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String    @unique
 
   expense             Expense[]
 

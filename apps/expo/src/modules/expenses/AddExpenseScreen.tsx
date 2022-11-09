@@ -24,8 +24,8 @@ export const AddExpenseScreen = () => {
     async onSuccess(data) {
       if (household.data?.household) {
         const id = household.data?.household?.id;
-        const expenses = ctx.expense.getHousehold.getData({ household_id: id });
-        ctx.expense.getHousehold.setData([...(expenses || []), data], { household_id: id });
+        const expenses = ctx.expense.getHousehold.getData({ householdId: id });
+        ctx.expense.getHousehold.setData([...(expenses || []), data], { householdId: id });
       }
     },
   });

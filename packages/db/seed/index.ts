@@ -18,7 +18,7 @@ const main = async () => {
     create: {
       email: johannaMail,
       name: "Johanna Thorstensson",
-      email_verified: true,
+      emailVerified: true,
     },
   });
 
@@ -28,11 +28,11 @@ const main = async () => {
     create: {
       email: viktorMail,
       name: "Viktor Malmedal",
-      email_verified: true,
+      emailVerified: true,
       onboarding: {
         create: {
-          household_complete: true,
-          userinfo_complete: true,
+          householdComplete: true,
+          userinfoComplete: true,
         },
       },
     },
@@ -45,9 +45,9 @@ const main = async () => {
   const householdMembers = await Promise.all(
     users.map(user =>
       prisma.householdMember.upsert({
-        where: { user_id: user.id },
+        where: { userId: user.id },
         update: {},
-        create: { user_id: user.id, household_id: household.id },
+        create: { userId: user.id, householdId: household.id },
       }),
     ),
   );
@@ -55,8 +55,8 @@ const main = async () => {
   console.log({ householdMembers });
 
   if (householdMembers?.[0]?.id) {
-    const member_id = householdMembers[0].id;
-    const exp = await Promise.all(expenses.map(expense => prisma.expense.create({ data: { member_id, ...expense } })));
+    const memberId = householdMembers[0].id;
+    const exp = await Promise.all(expenses.map(expense => prisma.expense.create({ data: { memberId, ...expense } })));
     console.log({ exp });
   }
 };
