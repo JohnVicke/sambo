@@ -3,9 +3,9 @@ import AWS from "aws-sdk";
 type PresignedUrlMethods = "GET" | "PUT";
 
 interface GetPresignedUrlParams {
-  method: PresignedUrlMethods;
   key: string;
-  bucket: string;
+  method: PresignedUrlMethods;
+  bucket?: string;
   expires?: number;
 }
 
@@ -18,7 +18,7 @@ let s3: AWS.S3 | undefined;
 
 const getS3Instance = () => {
   if (s3) return s3;
-  return new AWS.S3();
+  return new AWS.S3(); // TODO: add credentials
 };
 
 export const getPresignedUrl = ({ method, key, bucket = "samboappen", expires = 100 }: GetPresignedUrlParams) =>

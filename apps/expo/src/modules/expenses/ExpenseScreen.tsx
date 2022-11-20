@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { format } from "date-fns";
 import { FlatList, View } from "react-native";
@@ -10,69 +10,19 @@ import { DefaultLayout } from "../layouts/DefaultLayout";
 import { Divider } from "../../components/Divider";
 import { GradientButton } from "../../components/GradientButton";
 import { br } from "../../components/Br";
-import { MotiView } from "moti";
-import { MotiPressable } from "moti/interactions";
-import { PlusIcon } from "react-native-heroicons/outline";
 import { inferProcedureOutput } from "@trpc/server";
 import { AppRouter } from "@acme/api";
-
-type AnimatedAddButtonProps = {
-  description: string;
-  onPress: () => void;
-};
-
-const AnimatedAddButton = ({ description, onPress }: AnimatedAddButtonProps) => {
-  const [visibile, setVisible] = useState(true);
-  return (
-    <MotiPressable onPress={onPress}>
-      <MotiView
-        className="flex flex-row bg-rose-300 p-2"
-        from={{ borderRadius: 10 }}
-        animate={{ borderRadius: 50 }}
-        transition={{ delay: 5000 }}
-      >
-        {visibile && (
-          <MotiView
-            className="mr-2"
-            from={{ translateX: 0, opacity: 1 }}
-            animate={{ translateX: 20, opacity: 0 }}
-            transition={{ type: "timing", delay: 4800 }}
-            onDidAnimate={() => {
-              setVisible(false);
-            }}
-          >
-            <Text>{description}</Text>
-          </MotiView>
-        )}
-        <MotiView
-          className="w-[24px]"
-          from={{ rotateZ: "180deg" }}
-          animate={{ rotateZ: "0deg" }}
-          transition={{ delay: 5000 }}
-        >
-          <PlusIcon height={24} width={24} color="black" />
-        </MotiView>
-      </MotiView>
-    </MotiPressable>
-  );
-};
+import { AnimatedAddButton } from "./AnimatedAddButton";
 
 type ExpenseSummaryProps = {
   name: string;
-  balance: number;
   householdId: string;
 };
 
-const ExpenseSummary = ({ name, balance, householdId }: ExpenseSummaryProps) => {
+const ExpenseSummary = ({ name, householdId }: ExpenseSummaryProps) => {
   const { data, isLoading } = trpc.expense.getStanding.useQuery({ householdId });
 
-  let color = "text-black";
-
-  if (balance > 0) {
-    color = "text-emerald-500";
-  } else if (balance < 0) {
-    color = "text-red-600";
-  }
+  const color = isLoading ? "text-black" : data?.spent ? "text-emerald-500" : "text-red-600";
 
   return (
     <View>
@@ -80,9 +30,9 @@ const ExpenseSummary = ({ name, balance, householdId }: ExpenseSummaryProps) => 
       <View className="my-1" />
       <View className="flex flex-row items-start justify-between">
         <View>
-          <Text>Är skyldig dig:</Text>
+          <Text>{data?.spent ? "Är skyldig dig:" : "Du är skyldig:"}</Text>
           <Text color={color} medium xl>
-            {balance} kr
+            {isLoading ? "---" : data?.spent || data?.owed} kr
           </Text>
         </View>
         <GradientButton>Begär{br}Pengar</GradientButton>
@@ -151,7 +101,7 @@ export const ExpenseScreen = ({ navigation }: MainNavigatorProps) => {
   return (
     <View className="flex-1">
       <DefaultLayout scroll>
-        <ExpenseSummary name={household.data.household.name} balance={1000} householdId={household.data.household.id} />
+        <ExpenseSummary name={household.data.household.name} householdId={household.data.household.id} />
         <View className="w-full rounded-md bg-neutral-300"></View>
         {household.data.household.id && <Expenses householdId={household.data.household.id} />}
       </DefaultLayout>

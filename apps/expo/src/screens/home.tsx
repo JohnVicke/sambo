@@ -21,6 +21,7 @@ export const HomeScreen = ({ navigation }: MainNavigatorProps) => {
     <DefaultLayout>
       <View className="h-full w-full p-4">
         <Button onPress={() => navigation.navigate("Expense")}>Utgifter</Button>
+        <Button onPress={() => navigation.navigate("Profile")}>Profil</Button>
       </View>
     </DefaultLayout>
   );

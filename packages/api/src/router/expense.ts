@@ -26,10 +26,12 @@ export const expenseRouter = t.router({
       return expense;
     }),
 
-  getStanding: authProcedure.input(z.object({ householdId: z.string() })).query(async ({ ctx, input }) => {
-    const { householdId } = input;
-    try {
-      const hhSpendings = await ctx.prisma.$queryRaw<SummaryResponse[]>`
+  getStanding: authProcedure
+    .input(z.object({ householdId: z.string() }))
+    .query(async ({ ctx, input }): Promise<{ owed?: number; spent?: number } | undefined> => {
+      const { householdId } = input;
+      try {
+        const hhSpendings = await ctx.prisma.$queryRaw<SummaryResponse[]>`
 SELECT u.name, u.id as userId, SUM(e.amount) as expenseSum
 FROM Household h 
 INNER JOIN HouseholdMember hm 
@@ -42,24 +44,25 @@ WHERE e.complete != true AND h.id = ${householdId}
 GROUP BY hm.id, u.name, u.id
     `;
 
-      const owed = hhSpendings.reduce((acc, spending) => {
-        if (spending.userId === ctx.user.id) {
-          return acc;
-        }
-        return acc + spending.expenseSum;
-      }, 0);
+        const owedSum = hhSpendings.reduce((acc, spending) => {
+          if (spending.userId === ctx.user.id) {
+            return acc;
+          }
+          return acc + spending.expenseSum;
+        }, 0);
 
-      const spent = hhSpendings.find(spending => spending.userId === ctx.user.id)?.expenseSum || 0;
+        const spentSum = hhSpendings.find(spending => spending.userId === ctx.user.id)?.expenseSum || 0;
 
-      console.log({ owed });
-      console.log({ spent });
+        if (spentSum > owedSum)
+          return {
+            spent: spentSum,
+          };
 
-      return hhSpendings;
-    } catch (error) {
-      console.error(error);
-      return error;
-    }
-  }),
+        return { owed: owedSum / 2 };
+      } catch (error) {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      }
+    }),
 
   getHousehold: authProcedure.input(z.object({ householdId: z.string() })).query(async ({ ctx, input }) => {
     const data = await ctx.prisma.household.findFirst({
